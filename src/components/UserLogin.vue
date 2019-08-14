@@ -51,16 +51,13 @@ export default {
         String(this.email).toLowerCase()
       );
 
-      // Hash Password
-
       // Test for valid Email
       if (!isValidEmail) {
         this.showAlert();
         this.email = "";
         this.password = "";
       } else {
-        this.$emit("get-email", this.email);
-        this.$emit("get-password", this.password);
+        this.$emit("get-auth", this.email, this.password);
         this.email = "";
         this.password = "";
       }

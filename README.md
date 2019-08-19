@@ -2,12 +2,18 @@
 
 ## Project setup
 ```
-npm install
+npm install @vue/cli
+composer require laravel/passport
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and runs Vue.js server
 ```
 npm run serve
+```
+
+### Compiles and runs Laravel Passport
+```
+php artisan serve
 ```
 
 ### Compiles and minifies for production

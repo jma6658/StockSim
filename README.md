@@ -5,7 +5,11 @@
 npm install @vue/cli
 composer require laravel/passport
 ```
-
+### Open Chrome which allow access to no 'access-control-allow-origin' header request.
+```
+On Windows Run: 
+chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
+```
 ### Compiles and runs Vue.js server
 ```
 npm run serve

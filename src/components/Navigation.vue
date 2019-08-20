@@ -34,16 +34,18 @@
           <ion-title>Home</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content></ion-content>
+      <ion-content><Index /></ion-content>
     </div>
     <ion-menu-controller></ion-menu-controller>
   </div>
 </template>
 
 <script>
+import Index from "../components/Index.vue";
+
 export default {
   name: "navigation",
-  components: {},
+  components: { Index },
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn;

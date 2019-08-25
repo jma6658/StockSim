@@ -18,7 +18,7 @@ def processlogin(request):
     users = User.objects.all().filter(username=username)
     if(len(users) == 0):
         return JsonResponse({'access': 'error'}, safe=False)
-    
+
     else:
         headers = {'content-type': 'application/json'}
         data = json.dumps({'username': username, 'password': password})
@@ -26,10 +26,12 @@ def processlogin(request):
         r = requests.post(url, data=data, headers=headers)
         a = r.json()
         access = a['access']
-        userid = User.objects.values_list('id', flat=True).get(username=username)
+        userid = User.objects.values_list(
+            'id', flat=True).get(username=username)
         insertuser = Login(id=userid, accesstoken=access)
         insertuser.save()
         return JsonResponse({'access': access}, safe=False)
+        
 
 
 @csrf_exempt

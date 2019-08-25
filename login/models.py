@@ -2,8 +2,7 @@ from django.db import models
 
 class Login(models.Model):
     id = models.IntegerField(primary_key=True)
-    username = models.TextField()
-    password = models.TextField()
+    accesstoken = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.title

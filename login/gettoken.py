@@ -5,50 +5,52 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 import logging
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Login
 
-def processlogin(request, username, password):
+
+@csrf_exempt
+def processlogin(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body['email']
+    password = body['password']
     users = User.objects.all().filter(username=username)
     if(len(users) == 0):
-        return redirect('/')
+        return JsonResponse({'access': 'error'}, safe=False)
     
     else:
         headers = {'content-type': 'application/json'}
         data = json.dumps({'username': username, 'password': password})
         url = "http://localhost:8000/api/token"
         r = requests.post(url, data=data, headers=headers)
-        a = str(r.json())
-        
-        return JsonResponse(a, safe=False)
-        
-        # return redirect('/')
-        
-        if "detail" not in a:
-            context = {
-                'length': len(users),
-                'access': a['access'],
-                'refresh': a['refresh'],
-                'checker': 0,
-                'response': b
-            }
-            return render(request, 'login/index.html', context)
-        
-        else:
-            context = {
-                'length': len(users),
-                'detail': a['detail'],
-                'checker': 1
-            }
-            return render(request, 'login/index.html', context)
+        a = r.json()
+        access = a['access']
+        userid = User.objects.values_list('id', flat=True).get(username=username)
+        insertuser = Login(id=userid, accesstoken=access)
+        insertuser.save()
+        return JsonResponse({'access': access}, safe=False)
 
 
+@csrf_exempt
 def processregister(request, username, password):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body['email']
+    password = body['password']
     users = User.objects.all().filter(username=username)
     if(len(users) == 0):
         User.objects.create_user(username, '', password)
-        a = "successfully created a user"
-        return redirect('/')
-        # return a
+        return JsonResponse({'message': 'account successfully created'}, safe=False)
     else:
-        a = "username already taken"
-        return redirect('/')
-        # return a
+        return JsonResponse({'message': 'username already taken'}, safe=False)
+
+
+@csrf_exempt
+def processlogout(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    print(str(body))
+    accesstoken = body['accesstoken']
+    Login.objects.filter(accesstoken=accesstoken).delete()
+    return JsonResponse({'message': 'Logout Successful'}, safe=False)

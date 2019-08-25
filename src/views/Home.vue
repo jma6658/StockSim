@@ -12,6 +12,8 @@ export default {
   name: "home",
   components: {
     Navigation
+  },
+  methods: {
   }
 };
 </script>

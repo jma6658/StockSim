@@ -14,6 +14,14 @@
               <h3>{{item.title}}</h3>
             </ion-label>
           </ion-item>
+          <router-link :to="{ name: 'logout' }">
+            <ion-item v-if="loggedIn">
+              <ion-icon slot="start" name="log-out" style="color: #444"></ion-icon>
+              <ion-label>
+                <h3>Logout</h3>
+              </ion-label>
+            </ion-item>
+          </router-link>
         </ion-list>
       </ion-content>
     </ion-menu>
@@ -26,9 +34,7 @@
           <ion-title>Home</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content>
-        <Index />
-      </ion-content>
+      <ion-content><Index /></ion-content>
     </div>
     <ion-menu-controller></ion-menu-controller>
   </div>
@@ -40,6 +46,11 @@ import Index from "../components/Index.vue";
 export default {
   name: "navigation",
   components: { Index },
+  computed: {
+    loggedIn() {
+      return this.$store.getters.loggedIn;
+    }
+  },
   data() {
     return {
       items: [

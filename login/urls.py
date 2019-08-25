@@ -7,6 +7,7 @@ router.register('login', views.LoginView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('login/username=<username>&password=<password>', gettoken.processlogin),
-    path('register/username=<username>&password=<password>', gettoken.processregister)
+    path('login', gettoken.processlogin),
+    path('register', gettoken.processregister),
+    path('logout', gettoken.processlogout)
 ]
